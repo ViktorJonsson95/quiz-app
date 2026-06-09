@@ -41,12 +41,6 @@ export default function App() {
     setActiveQuiz(newQuiz)
   }
 
-  const clearQuiz = () => {
-    localStorage.removeItem("quizzes")
-    setQuizzes([])
-    setActiveQuiz(null)
-  }
-
   return (
     <div className="app">
       <aside className="sidebar">
