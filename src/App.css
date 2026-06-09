@@ -1,0 +1,35 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sidebar {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.content {
+  padding: 1rem;
+}
+
+.prompt {
+  color: rgb(230, 76, 107);
+}
+
+@media (min-width: 768px) {
+  .app {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    border-bottom: none;
+    border-right: 1px solid #ddd;
+  }
+
+  .content {
+    flex: 1;
+  }
+}
