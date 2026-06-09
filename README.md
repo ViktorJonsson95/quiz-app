@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
+# Quiz Trainer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+En enkel React-applikation för att skapa och studera quiz baserade på kursmaterial, anteckningar eller annan text. Quiz genereras med hjälp av ChatGPT och sparas lokalt i webbläsaren så att du kan fortsätta studera senare.
 
-Currently, two official plugins are available:
+## Funktioner
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* Importera quiz genom att klistra in JSON
+* Spara quiz automatiskt i Local Storage
+* Hantera flera quiz samtidigt
+* Visa en fråga i taget
+* Visa hint innan facit
+* Visa facit och förklaring
+* Fortsätt där du slutade
+* Mobile First-layout
+* Ingen backend krävs
 
-## React Compiler
+## Hur det fungerar
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Generera quiz
 
-## Expanding the ESLint configuration
+Kopiera kursmaterial eller anteckningar och använd följande prompt i ChatGPT:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```txt
+Skapa ett JSON-objekt enligt detta schema:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+{
+  "title": string,
+  "questions": [
+    {
+      "id": number,
+      "category": string,
+      "question": string,
+      "hint": string,
+      "answer": string,
+      "explanation": string
+    }
+  ]
+}
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Regler:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Returnera endast giltig JSON.
+- Ingen markdown.
+- Ingen förklarande text.
+- Varje fråga måste ha en hint.
+- Hinten ska hjälpa studenten tänka i rätt riktning utan att avslöja svaret.
+- Täck allt material.
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Importera quiz
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Kopiera JSON-svaret från ChatGPT.
+2. Klistra in det i appens textfält.
+3. Klicka på "Ladda quiz".
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 3. Studera
+
+* Välj ett quiz i sidomenyn.
+* Svara på frågan.
+* Visa hint vid behov.
+* Visa facit.
+* Läs förklaringen.
+* Gå vidare till nästa fråga.
+
+## JSON-format
+
+Exempel:
+
+```json
+{
+  "title": "Avancerad Frontend",
+  "questions": [
+    {
+      "id": 1,
+      "category": "Zod",
+      "question": "Vad är skillnaden mellan TypeScript och Zod?",
+      "hint": "Tänk på compile-time och runtime.",
+      "answer": "TypeScript validerar vid compile-time medan Zod validerar vid runtime.",
+      "explanation": "TypeScript försvinner efter kompilering medan Zod fortsätter validera data när applikationen körs."
+    }
+  ]
+}
+```
+
+## Tekniker
+
+* React
+* TypeScript
+* Vite
+* Local Storage
+
+## Lagring
+
+Alla quiz sparas lokalt i webbläsaren via Local Storage.
+
+Ingen data skickas till någon server.
+
+Om Local Storage rensas försvinner quizen.
+
+## Installation
+
+```bash
+npm install
+npm run dev
+```
+
+## Framtida förbättringar
+
+* Bättre UI
+* Statistik per quiz
+
+
+```
 ```
