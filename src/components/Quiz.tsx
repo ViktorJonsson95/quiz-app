@@ -34,35 +34,85 @@ export default function Quiz({ quiz }: Props) {
         setShowHint(false)
     }
 
+    const previousQuestion = () => {
+        if (currentIndex === 0) return
+
+        setCurrentIndex((prev) => prev - 1)
+        setUserAnswer("")
+        setShowAnswer(false)
+        setShowHint(false)
+    }
+
     return (
-        <div>
+        <div className="quiz-card">
             <h2>{quiz.title}</h2>
 
-            <p>
-                Fråga {currentIndex + 1} /{" "}
-                {quiz.questions.length}
-            </p>
+            <div className="quiz-header">
+                <p>
+                    Fråga {currentIndex + 1} / {quiz.questions.length}
+                </p>
+
+                <button
+                    onClick={() => {
+                        setCurrentIndex(0)
+                        setUserAnswer("")
+                        setShowAnswer(false)
+                        setShowHint(false)
+                        localStorage.setItem("currentQuestion", "0")
+                    }}
+                >
+                    Nollställ
+                </button>
+            </div>
 
             <p>
-                <strong>Kategori:</strong>{" "}
-                {question.category}
+                <strong>Kategori:</strong> {question.category}
             </p>
 
             <h3>{question.question}</h3>
 
-
             <textarea
                 rows={6}
                 value={userAnswer}
-                onChange={(e) =>
-                    setUserAnswer(e.target.value)
-                }
+                onChange={(e) => setUserAnswer(e.target.value)}
             />
 
-            <br />
-            <button onClick={() => setShowHint(true)}>
-                Visa hint
-            </button>
+            <div className="actions">
+                <button
+                    onClick={previousQuestion}
+                    disabled={currentIndex === 0}
+                >
+                    Föregående fråga
+                </button>
+
+                <button
+                    onClick={nextQuestion}
+                    disabled={
+                        currentIndex ===
+                        quiz.questions.length - 1
+                    }
+                >
+                    Nästa fråga
+                </button>
+
+                <button
+                    onClick={() => setShowHint(!showHint)}
+                >
+                    {showHint
+                        ? "Dölj hint"
+                        : "Visa hint"}
+                </button>
+
+                <button
+                    onClick={() =>
+                        setShowAnswer(!showAnswer)
+                    }
+                >
+                    {showAnswer
+                        ? "Dölj facit"
+                        : "Visa facit"}
+                </button>
+            </div>
 
             {showHint && (
                 <p>
@@ -70,16 +120,8 @@ export default function Quiz({ quiz }: Props) {
                 </p>
             )}
 
-            {!showAnswer && (
-                <button
-                    onClick={() => setShowAnswer(true)}
-                >
-                    Visa facit
-                </button>
-            )}
-
             {showAnswer && (
-                <>
+                <div className="answer-section">
                     <h4>Ditt svar</h4>
                     <p>{userAnswer || "Inget svar"}</p>
 
@@ -88,21 +130,8 @@ export default function Quiz({ quiz }: Props) {
 
                     <h4>Förklaring</h4>
                     <p>{question.explanation}</p>
-
-                    <button onClick={nextQuestion}>
-                        Nästa fråga
-                    </button>
-                </>
+                </div>
             )}
-
-            <button
-                onClick={() => {
-                    setCurrentIndex(0)
-                    localStorage.setItem("currentQuestion", "0")
-                }}
-            >
-                Börja om
-            </button>
         </div>
     )
 }
