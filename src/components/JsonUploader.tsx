@@ -7,6 +7,44 @@ type Props = {
 
 export default function JsonUploader({ onLoad }: Props) {
     const [jsonText, setJsonText] = useState("")
+    const [copied, setCopied] = useState(false)
+    const [questionCount, setQuestionCount] = useState(20)
+    const promptText = `Skapa ett JSON-objekt enligt detta schema:
+
+{
+  "title": string,
+  "questions": [
+    {
+      "id": number,
+      "category": string,
+      "question": string,
+      "hint": string,
+      "answer": string,
+      "explanation": string
+    }
+  ]
+}
+
+Regler:
+
+- Skapa exakt ${questionCount} frågor.
+- Returnera endast giltig JSON.
+- Ingen markdown.
+- Ingen förklarande text.
+- Varje fråga måste ha en hint.
+- Hinten ska hjälpa studenten tänka i rätt riktning utan att avslöja svaret.
+- Täck allt material.`
+
+
+    const copyPrompt = async () => {
+        await navigator.clipboard.writeText(promptText)
+
+        setCopied(true)
+
+        setTimeout(() => {
+            setCopied(false)
+        }, 2000)
+    }
 
     const handleLoad = () => {
         try {
@@ -26,58 +64,86 @@ export default function JsonUploader({ onLoad }: Props) {
         }
     }
 
+
+
     return (
         <div>
-            <h2>Ladda quiz</h2>
+            <h1>Quiz Generator</h1>
+
             <p>
-                Klistra in JSON från ChatGPT och klicka på
-                "Ladda quiz".
+                Skapa quiz från kursmaterial med hjälp av ChatGPT.
+                Följ stegen nedan.
             </p>
-            <textarea
-                rows={20}
-                cols={80}
-                value={jsonText}
-                onChange={(e) => setJsonText(e.target.value)}
-                placeholder="Klistra in JSON här..."
-            />
-            <details>
-                <summary className="prompt">Visa prompt</summary>
 
-                <pre>
-                    {`Skapa ett JSON-objekt enligt detta schema:
+            <section className="step-card">
+                <h2>Steg 1: Skapa prompt</h2>
 
-{
-  "title": string,
-  "questions": [
-    {
-      "id": number,
-      "category": string,
-      "question": string,
-      "hint": string,
-      "answer": string,
-      "explanation": string
-    }
-  ]
-}
+                <p>
+                    Välj antal frågor och kopiera prompten.
+                    Klistra sedan in den tillsammans med
+                    ditt kursmaterial i ChatGPT.
+                </p>
 
-Regler:
+                <label>
+                    Antal frågor:
+                    <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={questionCount}
+                        onChange={(e) =>
+                            setQuestionCount(
+                                Number(e.target.value)
+                            )
+                        }
+                    />
+                </label>
 
-- Returnera endast giltig JSON.
-- Ingen markdown.
-- Ingen förklarande text.
-- Varje fråga måste ha en hint.
-- Hinten ska hjälpa studenten tänka i rätt riktning utan att avslöja svaret.
-- Täck allt material.`}
-                </pre>
-            </details>
-            <br />
+                <button
+                    className="copy-prompt-btn"
+                    onClick={copyPrompt}
+                >
+                    {copied
+                        ? "Prompt kopierad!"
+                        : "Kopiera prompt"}
+                </button>
+            </section>
 
-            <button
-                onClick={handleLoad}
-                disabled={!jsonText.trim()}
-            >
-                Ladda quiz
-            </button>
+            <section className="step-card">
+                <h2>Steg 2: Generera quiz i ChatGPT</h2>
+
+                <p>
+                    Klistra in prompten tillsammans med
+                    dina anteckningar eller kursmaterial.
+                    ChatGPT ska svara med JSON enligt
+                    schemat ovan.
+                </p>
+            </section>
+
+            <section className="step-card">
+                <h2>Steg 3: Ladda quiz</h2>
+
+                <p>
+                    Klistra in JSON-svaret från ChatGPT
+                    och klicka på "Ladda quiz".
+                </p>
+
+                <textarea
+                    rows={20}
+                    value={jsonText}
+                    onChange={(e) =>
+                        setJsonText(e.target.value)
+                    }
+                    placeholder="Klistra in JSON här..."
+                />
+
+                <button
+                    onClick={handleLoad}
+                    disabled={!jsonText.trim()}
+                >
+                    Ladda quiz
+                </button>
+            </section>
         </div>
     )
 }

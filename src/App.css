@@ -52,6 +52,31 @@ textarea {
   margin-top: 1rem;
 }
 
+.step-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.step-card h2 {
+  margin-top: 0;
+}
+
+.copy-prompt-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.step-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
 .answer-section {
   margin-top: 1.5rem;
 }

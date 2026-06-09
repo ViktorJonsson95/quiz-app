@@ -14,7 +14,6 @@ export default function App() {
     return JSON.parse(saved)
   })
   const [activeQuiz, setActiveQuiz] = useState<SavedQuiz | null>(null)
-  const [showUploader, setShowUploader] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem("quizzes")
@@ -60,46 +59,12 @@ export default function App() {
       </aside>
 
       <main className="content">
-        {showUploader && (
-          <>
-            <button
-              onClick={() => {
-                setShowUploader(false)
-              }}
-            >
-              ← Tillbaka
-            </button>
 
-            <JsonUploader
-              onLoad={(data) => {
-                handleLoadQuiz(data)
-                setShowUploader(false)
-              }}
-            />
-          </>
-        )}
 
-        {!showUploader && !activeQuiz && (
-          <>
-            <div className="welcome-card">
-              <h1>Hur man använder appen</h1>
-
-              <ol>
-                <li>Sammanfatta kursmaterial eller anteckningar.</li>
-                <li>Använd prompten och kursmaterial för att generera quiz-JSON.</li>
-                <li>Klistra in JSON nedan.</li>
-                <li>Ladda quizet.</li>
-                <li>Svara på frågorna.</li>
-                <li>Quizet sparas automatiskt i webbläsaren.</li>
-              </ol>
-
-              <JsonUploader onLoad={handleLoadQuiz} />
-            </div>
-          </>
-        )}
-
-        {activeQuiz && (
-          <Quiz quiz={activeQuiz.quiz} />
+        {!activeQuiz && (
+          <JsonUploader
+            onLoad={handleLoadQuiz}
+          />
         )}
       </main>
     </div>
