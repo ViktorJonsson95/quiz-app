@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import JsonUploader from "./components/JsonUploader"
 import type { QuizData, SavedQuiz } from "./types/quiz"
+import Quiz from "./components/Quiz"
 import QuizList from "./components/QuizList"
 import "./App.css"
 
@@ -62,6 +63,10 @@ export default function App() {
           <JsonUploader
             onLoad={handleLoadQuiz}
           />
+        )}
+
+        {activeQuiz && (
+          <Quiz quiz={activeQuiz.quiz} />
         )}
       </main>
     </div>
